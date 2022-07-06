@@ -1,0 +1,38 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: application
+  annotations:
+    kubernetes.io/ingress.class: public
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+spec:
+  tls:
+    - hosts:
+        - app.local
+      secretName: default-tls-secret
+  rules:
+    - host: app.local
+      http:
+        paths:
+          - path: /one
+            pathType: Prefix
+            backend:
+              service:
+                name: one-app
+                port:
+                  name: http
+          - path: /two
+            pathType: Prefix
+            backend:
+              service:
+                name: two-app
+                port:
+                  name: http
+          - path: /three
+            pathType: Prefix
+            backend:
+              service:
+                name: three-app
+                port:
+                  name: http
